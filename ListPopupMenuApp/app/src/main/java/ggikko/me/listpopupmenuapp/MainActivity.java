@@ -1,13 +1,16 @@
 package ggikko.me.listpopupmenuapp;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import butterknife.BindView;
@@ -18,10 +21,21 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.drop) Button drop;
 
+    PopupWindow popupWindow;
+
     @OnClick(R.id.drop)
     void callDropMenu(){
-        PopupWindow popupwindow_obj = popupDisplay();
-        popupwindow_obj.showAsDropDown(drop, -40, 18); // where u want show on view click event popupwindow.showAsDropDown(view, x, y);
+
+        if(popupWindow != null){
+            Log.e("ggikko","koko1");
+            popupWindow.dismiss();
+            popupWindow = null;
+        }else{
+            Log.e("ggikko","koko2");
+            popupDisplay();
+             // where u want show on view click event popupwindow.showAsDropDown(view, x, y);
+        }
+        Log.e("ggikko","koko3");
     }
 
     @Override
@@ -33,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public PopupWindow popupDisplay()
     {
 
-        final PopupWindow popupWindow = new PopupWindow(this);
+        popupWindow = new PopupWindow(this);
+        popupWindow.setBackgroundDrawable(null);
         popupWindow.setAnimationStyle(R.style.animationName);
 
         // inflate your layout or dynamically add view
@@ -46,10 +62,12 @@ public class MainActivity extends AppCompatActivity {
 
         Button item = (Button) view.findViewById(R.id.button1);
 
-        popupWindow.setFocusable(true);
+//        popupWindow.setFocusable(true);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(view);
+        popupWindow.showAsDropDown(drop, -92, -8);
+//        popupWindow.showAtLocation(drop, Gravity.TOP|Gravity.RIGHT, 0, 18);
 
         return popupWindow;
     }
